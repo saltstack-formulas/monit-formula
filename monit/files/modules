@@ -48,8 +48,8 @@
         {%- if 'pidfile' in kind_v or 'path' in kind_v %}
 check {{ mod_name }} {{ name }} with {{ element }} {{ element_v }}
         {%- endif -%}
-      {% endfor %}
-    {% endfor %}
+      {%- endfor -%}
+    {%- endfor -%}
     {%- for kind, kind_v in mod_name_v.iteritems() -%}
       {%- for element, element_v in kind_v.iteritems() -%}
 
