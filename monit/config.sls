@@ -32,6 +32,7 @@
   file.managed:
     - source: salt://monit/files/modules
     - template: jinja
+    - makedirs: True
     - watch_in:
       - service: {{ monit.service.name }}
     - context:
