@@ -7,6 +7,8 @@
     - template: jinja
     - makedirs: True
     - mode: '0700'
+    - watch_in:
+      - service: {{ monit.service.name }}
     - context:
         config_includes: {{ monit.config_includes }}
         http_access: {{ monit.http_access }}
@@ -18,6 +20,8 @@
     - source: salt://monit/files/mail
     - template: jinja
     - makedirs: True
+    - watch_in:
+      - service: {{ monit.service.name }}
     - context:
       mail_alert: {{ monit.mail_alert }}
 {% endif %}
@@ -28,5 +32,7 @@
   file.managed:
     - source: salt://monit/files/modules
     - template: jinja
+    - watch_in:
+      - service: {{ monit.service.name }}
     - context:
       modules: {{ monit.modules }}
