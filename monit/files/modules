@@ -1,3 +1,4 @@
+{%- from "monit/map.jinja" import monit with context -%}
 # -*- coding: utf-8 -*-
 # vim: ft=jinja
 
@@ -22,7 +23,7 @@
 -#}
 {#- module = nginx_init, 
     module_v = {'process': {'with': {'pidfile':... #}
-{%- for module, module_v in modules.iteritems() -%}
+{%- for module, module_v in monit.modules.iteritems() -%}
 
   {#- mod_name = process 
       mod_name_v = {'custom': {'name': 'nginx'}, 'with': {'pidfile':... #}
@@ -46,7 +47,7 @@
     
         {#- if it has 'pidfile' or 'path' then this is the 'check' line #}
         {%- if 'pidfile' in kind_v or 'path' in kind_v %}
-check {{ mod_name|replace('\\n', '\n') }} {{ name|replace('\\n', '\n') }} with {{ element|replace('\\n', '\n') }} {{ element_v|replace('\\n', '\n') }}
+check {{ mod_name|replace('\\n', '\n') }} {{ name|replace('\\n', '\n') }} with {{ element|replace('\\n', '\n') }} "{{ element_v|replace('\\n', '\n') }}"
         {%- endif -%}
       {%- endfor -%}
     {%- endfor -%}
@@ -70,7 +71,9 @@ check {{ mod_name|replace('\\n', '\n') }} {{ name|replace('\\n', '\n') }} with {
           {#- 'action' is appended to the 'if failed' line #}
           {%- if 'action' not in element %}
   if {{ element|replace('\\n', '\n') }}
+  {%- if element_v is not none %}
     {{ element_v|replace('\\n', '\n')| indent(4) }}
+  {%- endif %}
   then {{ kind_v.action|replace('\\n', '\n') }}
           {%- endif %}
         {%- endif %}

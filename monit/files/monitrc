@@ -1,12 +1,14 @@
-set daemon  10
+{%- from "monit/map.jinja" import monit with context -%}
+set daemon {{ monit.daemon_interval }}
+set logfile {{ monit.logfile }}
 
-set httpd port {{ http_access.port }} and
-  use address {{ http_access.bind }}
-{%- for host in http_access.allowed.hosts %}
+set httpd port {{ monit.http_access.port }} and
+  use address {{ monit.http_access.bind }}
+{%- for host in monit.http_access.allowed.hosts %}
   allow {{ host }}
 {%- endfor %}
-{%- for userdata in http_access.allowed.users %}
+{%- for userdata in monit.http_access.allowed.users %}
   allow {{ userdata[0] }}:{{ userdata[1] }}
 {%- endfor %}
 
-include {{ config_includes }}/*
+include {{ monit.config_includes }}/*

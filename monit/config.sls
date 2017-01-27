@@ -9,9 +9,6 @@
     - mode: '0700'
     - watch_in:
       - service: {{ monit.service.name }}
-    - context:
-        config_includes: {{ monit.config_includes }}
-        http_access: {{ monit.http_access }}
 
 {#- This is the mail alert configuration #}
 {% if monit.mail_alert is defined %}
@@ -22,8 +19,6 @@
     - makedirs: True
     - watch_in:
       - service: {{ monit.service.name }}
-    - context:
-      mail_alert: {{ monit.mail_alert }}
 {% endif %}
 
 {#- This is populated by modules configuration
@@ -35,5 +30,3 @@
     - makedirs: True
     - watch_in:
       - service: {{ monit.service.name }}
-    - context:
-      modules: {{ monit.modules }}

@@ -1,15 +1,16 @@
-{%- for email in mail_alert.users -%}
-set alert {{email}} ON { invalid, timeout, resource, size, timestamp }
+{%- from "monit/map.jinja" import monit with context -%}
+{%- for email in monit.mail_alert.users -%}
+set alert {{ email }} ON { invalid, timeout, resource, size, timestamp }
 {% endfor %}
 
-{%- if mail_alert.account.email -%}
-set mail-format { from: {{mail_alert.account.email}} }
+{%- if monit.mail_alert.account.email -%}
+set mail-format { from: {{ monit.mail_alert.account.email }} }
 {%- endif -%}
 
-{%- if mail_alert.account.server and mail_alert.account.port %}
-set mailserver {{mail_alert.account.server}} port {{mail_alert.account.port}} 
-    {%- if mail_alert.account.email and 'password' in mail_alert.account and mail_alert.account.password %}
-    username "{{mail_alert.account.email}}" password "{{mail_alert.account.password}}"
+{%- if monit.mail_alert.account.server and monit.mail_alert.account.port %}
+set mailserver {{ monit.mail_alert.account.server }} port {{ monit.mail_alert.account.port }} 
+    {%- if monit.mail_alert.account.email and 'password' in monit.mail_alert.account and monit.mail_alert.account.password %}
+    username "{{ monit.mail_alert.account.email }}" password "{{ monit.mail_alert.account.password }}"
     using tlsv1
     {%- endif %}
     with timeout 30 seconds

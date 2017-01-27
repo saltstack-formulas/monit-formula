@@ -6,6 +6,8 @@ monit:
   config_includes: '/etc/monit/conf.d'
   service:
     name: monit
+  daemon_interval: 10
+  logfile: syslog
   http_access: 
     port: 2812
     bind: 127.0.0.1
