@@ -6,6 +6,8 @@ monit:
   config_includes: '/etc/monit/conf.d'
   service:
     name: monit
+    enable: True
+    status: running
   daemon_interval: 10
   logfile: syslog
   http_access: 

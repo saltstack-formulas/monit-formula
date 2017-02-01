@@ -4,6 +4,6 @@
 {% from "monit/map.jinja" import monit with context %}
 
 {{ monit.service.name }}:
-  service.running:
-    - enable: True
+  service.{{ monit.service.status }}:
+    - enable: {{ monit.service.enable }}
     - restart: True

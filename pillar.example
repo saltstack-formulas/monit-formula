@@ -1,4 +1,7 @@
 monit: 
+  service:
+    enable: True
+    status: running
   mail_alert:
     account:
       server: smtp.gmail.com
