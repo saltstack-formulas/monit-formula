@@ -1,5 +1,8 @@
 {%- from "monit/map.jinja" import monit with context -%}
 set daemon {{ monit.daemon_interval }}
+{%- if monit.daemon_start_delay %}
+  with start delay {{ monit.daemon_start_delay }}
+{%- endif %}
 set logfile {{ monit.logfile }}
 
 set httpd port {{ monit.http_access.port }} and

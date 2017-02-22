@@ -2,6 +2,8 @@ monit:
   service:
     enable: True
     status: running
+  daemon_interval: 30
+  daemon_start_delay: 60
   mail_alert:
     account:
       server: smtp.gmail.com
