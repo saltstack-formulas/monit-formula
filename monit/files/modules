@@ -1,3 +1,4 @@
+{%- from "monit/map.jinja" import monit with context -%}
 # -*- coding: utf-8 -*-
 # vim: ft=jinja
 
@@ -22,7 +23,7 @@
 -#}
 {#- module = nginx_init, 
     module_v = {'process': {'with': {'pidfile':... #}
-{%- for module, module_v in modules.iteritems() -%}
+{%- for module, module_v in monit.modules.iteritems() -%}
 
   {#- mod_name = process 
       mod_name_v = {'custom': {'name': 'nginx'}, 'with': {'pidfile':... #}
@@ -46,10 +47,10 @@
     
         {#- if it has 'pidfile' or 'path' then this is the 'check' line #}
         {%- if 'pidfile' in kind_v or 'path' in kind_v %}
-check {{ mod_name }} {{ name }} with {{ element }} {{ element_v }}
+check {{ mod_name|replace('\\n', '\n') }} {{ name|replace('\\n', '\n') }} with {{ element|replace('\\n', '\n') }} "{{ element_v|replace('\\n', '\n') }}"
         {%- endif -%}
-      {% endfor %}
-    {% endfor %}
+      {%- endfor -%}
+    {%- endfor -%}
     {%- for kind, kind_v in mod_name_v.iteritems() -%}
       {%- for element, element_v in kind_v.iteritems() -%}
 
@@ -58,9 +59,9 @@ check {{ mod_name }} {{ name }} with {{ element }} {{ element_v }}
 
           {#- filter 'start' to add 'program =' into this line #}
           {%- if 'start' in element or 'stop' in element %}
-  {{ element }} program = "{{ element_v }}"
+  {{ element|replace('\\n', '\n') }} program = "{{ element_v|replace('\\n', '\n') }}"
           {%- else %}
-  {{ element }} {{ element_v }}
+  {{ element|replace('\\n', '\n') }} {{ element_v|replace('\\n', '\n') }}
           {%- endif %}
         {%- endif -%}
 
@@ -69,7 +70,11 @@ check {{ mod_name }} {{ name }} with {{ element }} {{ element_v }}
 
           {#- 'action' is appended to the 'if failed' line #}
           {%- if 'action' not in element %}
-  if {{ element }} {{ element_v }} then {{ kind_v.action }}
+  if {{ element|replace('\\n', '\n') }}
+  {%- if element_v is not none %}
+    {{ element_v|replace('\\n', '\n')| indent(4) }}
+  {%- endif %}
+  then {{ kind_v.action|replace('\\n', '\n') }}
           {%- endif %}
         {%- endif %}
       {%- endfor %}

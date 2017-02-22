@@ -7,9 +7,10 @@
     - template: jinja
     - makedirs: True
     - mode: '0700'
-    - context:
-        config_includes: {{ monit.config_includes }}
-        http_access: {{ monit.http_access }}
+{%- if monit.service.status == 'running' %}
+    - watch_in:
+      - service: {{ monit.service.name }}
+{%- endif %}
 
 {#- This is the mail alert configuration #}
 {% if monit.mail_alert is defined %}
@@ -18,8 +19,10 @@
     - source: salt://monit/files/mail
     - template: jinja
     - makedirs: True
-    - context:
-      mail_alert: {{ monit.mail_alert }}
+{%- if monit.service.status == 'running' %}
+    - watch_in:
+      - service: {{ monit.service.name }}
+{%- endif %}
 {% endif %}
 
 {#- This is populated by modules configuration
@@ -28,5 +31,8 @@
   file.managed:
     - source: salt://monit/files/modules
     - template: jinja
-    - context:
-      modules: {{ monit.modules }}
+    - makedirs: True
+{%- if monit.service.status == 'running' %}
+    - watch_in:
+      - service: {{ monit.service.name }}
+{%- endif %}

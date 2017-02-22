@@ -11,6 +11,10 @@ that differ from whats in defaults.yaml
 {% set os_family_map = salt['grains.filter_by']({
         'Debian': {},
         'Kali': {},
+        'FreeBSD': {
+            'config': '/usr/local/etc/monitrc',
+            'config_includes': '/usr/local/etc/monit/conf.d'
+        },
         'Gentoo': {
             'pkg': 'app-admin/monit',
             'config': '/etc/monitrc',
